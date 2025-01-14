@@ -1,0 +1,18 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: pia-survey
+  namespace: pia
+
+spec:
+  image: {{image}}
+  liveness:
+    path: /internal/isalive
+    port: 8080
+    initialDelay: 20
+    timeout: 60
+  readiness:
+    path: /internal/isready
+    port: 8080
+    initialDelay: 20
+    timeout: 60

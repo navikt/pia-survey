@@ -42,6 +42,27 @@ jobs:
     outputs:
       image: ${{ steps.docker-push.outputs.image }}
 
+  deploy:
+    permissions:
+      id-token: write
+    strategy:
+      matrix:
+        cluster: [dev]
+    name: Deploy app to ${{ matrix.cluster }}
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy application to ${{ matrix.cluster }}
+        uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: ${{ matrix.cluster }}-gcp
+          RESOURCE: .nais/main.yaml
+          VARS: .nais/${{ matrix.cluster }}.yaml
+          VAR: image=${{ needs.build.outputs.image }}
+
   trivy-scan:
     name: Scanner docker image med Trivy
     if: github.ref == 'refs/heads/main'
