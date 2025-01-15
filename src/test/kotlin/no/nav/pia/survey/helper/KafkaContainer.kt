@@ -2,11 +2,15 @@ package no.nav.pia.survey.helper
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.time.withTimeoutOrNull
 import no.nav.pia.survey.kafka.KafkaTopics
 import org.apache.kafka.clients.CommonClientConfigs
+import org.apache.kafka.clients.admin.AdminClient
+import org.apache.kafka.clients.admin.AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.clients.producer.ProducerRecord
+import org.apache.kafka.clients.producer.RecordMetadata
 import org.apache.kafka.common.config.SaslConfigs
 import org.apache.kafka.common.serialization.StringSerializer
 import org.testcontainers.containers.Network
@@ -14,6 +18,7 @@ import org.testcontainers.containers.output.Slf4jLogConsumer
 import org.testcontainers.containers.wait.strategy.HostPortWaitStrategy
 import org.testcontainers.kafka.ConfluentKafkaContainer
 import org.testcontainers.utility.DockerImageName
+import java.time.Duration
 import java.util.TimeZone
 
 class KafkaContainer(
@@ -21,6 +26,7 @@ class KafkaContainer(
 ) {
     private val containerAlias = "kafka-container"
     private var kafkaProducer: KafkaProducer<String, String>
+    private var adminClient: AdminClient
 
     val container = ConfluentKafkaContainer(
         DockerImageName.parse("confluentinc/cp-kafka:7.6.0"),
@@ -41,6 +47,7 @@ class KafkaContainer(
         .apply {
             start()
             kafkaProducer = producer()
+            adminClient = AdminClient.create(mapOf(BOOTSTRAP_SERVERS_CONFIG to this.bootstrapServers))
         }
 
     fun getEnv() =
@@ -62,9 +69,34 @@ class KafkaContainer(
         topic: KafkaTopics,
     ) {
         runBlocking {
-            kafkaProducer.send(ProducerRecord(topic.navnMedNamespace, nøkkel, melding)).get()
-            delay(timeMillis = 30L)
+            val sendtMelding = kafkaProducer.send(ProducerRecord(topic.navnMedNamespace, nøkkel, melding)).get()
+            ventTilKonsumert(
+                konsumentGruppeId = topic.konsumentGruppe,
+                recordMetadata = sendtMelding,
+            )
         }
+    }
+
+    private suspend fun ventTilKonsumert(
+        konsumentGruppeId: String,
+        recordMetadata: RecordMetadata,
+    ) = withTimeoutOrNull(Duration.ofSeconds(5)) {
+        do {
+            delay(timeMillis = 1L)
+        } while (consumerSinOffset(
+                consumerGroup = konsumentGruppeId,
+                topic = recordMetadata.topic(),
+            ) <= recordMetadata.offset()
+        )
+    }
+
+    private fun consumerSinOffset(
+        consumerGroup: String,
+        topic: String,
+    ): Long {
+        val offsetMetadata = adminClient.listConsumerGroupOffsets(consumerGroup)
+            .partitionsToOffsetAndMetadata().get()
+        return offsetMetadata[offsetMetadata.keys.firstOrNull { it.topic().contains(topic) }]?.offset() ?: -1
     }
 
     private fun ConfluentKafkaContainer.producer(): KafkaProducer<String, String> =
