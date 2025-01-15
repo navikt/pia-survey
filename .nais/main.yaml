@@ -18,3 +18,9 @@ spec:
     timeout: 60
   kafka:
     pool: {{kafkaPool}}
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_17
+        tier: {{dbTier}}
+        databases:
+          - name: pia-survey-db

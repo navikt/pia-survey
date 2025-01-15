@@ -15,19 +15,27 @@ class TestContainerHelper {
     companion object {
         val log: Logger = LoggerFactory.getLogger(TestContainerHelper::class.java)
         private val network = Network.newNetwork()
+
         val kafkaContainer = KafkaContainer(network = network)
+        val postgresContainer = PostgresContainer(network = network)
 
         val piaSurveyContainer =
             GenericContainer(
                 ImageFromDockerfile().withDockerfile(Path("./Dockerfile")),
             )
-                .dependsOn(kafkaContainer.container)
+                .dependsOn(
+                    kafkaContainer.container,
+                    postgresContainer.container,
+                )
                 .withNetwork(network)
                 .withExposedPorts(8080)
                 .withLogConsumer(Slf4jLogConsumer(log).withPrefix("pia-survey").withSeparateOutputStreams())
                 .waitingFor(HttpWaitStrategy().forPath("/internal/isready").withStartupTimeout(Duration.ofSeconds(20)))
                 .withEnv(
                     kafkaContainer.getEnv()
+                        .plus(
+                            postgresContainer.envVars(),
+                        )
                         .plus(
                             mapOf(
                                 "NAIS_CLUSTER_NAME" to "lokal",
