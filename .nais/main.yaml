@@ -24,3 +24,11 @@ spec:
         tier: {{dbTier}}
         databases:
           - name: pia-survey-db
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: java
+    logging:
+      destinations:
+        - id: elastic
+        - id: loki
