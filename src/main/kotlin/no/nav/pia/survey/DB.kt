@@ -7,6 +7,11 @@ import javax.sql.DataSource
 internal fun createDataSource() =
     HikariDataSource().apply {
         jdbcUrl = MiljøVariabler.jdbcUrl
+        maximumPoolSize = 10
+        minimumIdle = 1
+        idleTimeout = 100000
+        connectionTimeout = 100000
+        maxLifetime = 300000
     }
 
 internal fun runMigration(dataSource: DataSource) =
