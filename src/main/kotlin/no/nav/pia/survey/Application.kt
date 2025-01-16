@@ -15,9 +15,7 @@ private val log = LoggerFactory.getLogger("no.nav.pia.survey")
 fun main() {
     val applikasjonsHelse = ApplikasjonsHelse()
 
-    createDataSource().use { dataSource ->
-        runMigration(dataSource = dataSource)
-    }
+    runMigration(dataSource = createDataSource())
 
     settOppKonsumenter(
         applikasjonsHelse = applikasjonsHelse,
