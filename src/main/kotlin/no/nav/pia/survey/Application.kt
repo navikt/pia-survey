@@ -16,7 +16,7 @@ fun main() {
     val applikasjonsHelse = ApplikasjonsHelse()
 
     createDataSource().use { dataSource ->
-        log.info("Laget datasource")
+        runMigration(dataSource = dataSource)
     }
 
     settOppKonsumenter(
