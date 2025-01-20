@@ -4,11 +4,13 @@ import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationStopped
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import no.nav.pia.survey.db.SurveyRepository
 import no.nav.pia.survey.helse.ApplikasjonsHelse
 import no.nav.pia.survey.kafka.KafkaConfig
 import no.nav.pia.survey.kafka.KafkaKonsument
 import no.nav.pia.survey.kafka.KafkaTopics
 import org.slf4j.LoggerFactory
+import javax.sql.DataSource
 
 private val log = LoggerFactory.getLogger("no.nav.pia.survey")
 
@@ -20,6 +22,7 @@ fun main() {
 
     settOppKonsumenter(
         applikasjonsHelse = applikasjonsHelse,
+        dataSource = dataSource,
     )
 
     val applikasjonsServer = embeddedServer(
@@ -39,17 +42,23 @@ fun main() {
     applikasjonsServer.start(wait = true)
 }
 
-fun settOppKonsumenter(applikasjonsHelse: ApplikasjonsHelse) {
+private fun settOppKonsumenter(
+    applikasjonsHelse: ApplikasjonsHelse,
+    dataSource: DataSource,
+) {
     log.info("Setter opp kafkakonsumenter")
+    val surveyRepository = SurveyRepository(dataSource = dataSource)
     val spørreundersøkelseKonsument = KafkaKonsument(
         kafkaConfig = KafkaConfig(),
         kafkaTopic = KafkaTopics.SPØRREUNDERSØKELSE,
         applikasjonsHelse = applikasjonsHelse,
-    )
+    ) {
+        surveyRepository.håndterKafkaMelding(it)
+    }
     spørreundersøkelseKonsument.startKonsument()
 }
 
-fun Application.piaSurveyApi(applikasjonsHelse: ApplikasjonsHelse) {
+internal fun Application.piaSurveyApi(applikasjonsHelse: ApplikasjonsHelse) {
     monitor.subscribe(ApplicationStopped) {
         applikasjonsHelse.ready = false
         applikasjonsHelse.alive = false

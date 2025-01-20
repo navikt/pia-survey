@@ -15,6 +15,7 @@ class KafkaKonsument(
     kafkaConfig: KafkaConfig,
     private val kafkaTopic: KafkaTopics,
     private val applikasjonsHelse: ApplikasjonsHelse,
+    private val block: (String) -> Unit,
 ) {
     private val log = LoggerFactory.getLogger(this::class.java)
     private val konsument = KafkaConsumer(
@@ -45,9 +46,10 @@ class KafkaKonsument(
         while (applikasjonsHelse.ready) {
             konsument.poll(Duration.ofMillis(10))
                 .map {
-                    it.key()
-                }.forEach {
-                    log.info("Mottok kafkamelding med nøkkel: $it")
+                    it.value()
+                }.forEach { survey ->
+                    log.info("Mottok kafkamelding med nøkkel: $survey")
+                    block(survey)
                 }
             konsument.commitAsync()
         }

@@ -32,10 +32,12 @@ dependencies {
     implementation("org.postgresql:postgresql:42.7.4")
     implementation("com.zaxxer:HikariCP:6.2.1")
     implementation("org.flywaydb:flyway-database-postgresql:11.1.1")
+    implementation("com.github.seratch:kotliquery:1.9.1")
 
     // -- div
     implementation("com.github.navikt:ia-felles:1.9.0")
     implementation("org.apache.kafka:kafka-clients:3.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
 
     // ----------- test
     testImplementation("org.testcontainers:kafka:$testcontainersVersion")
