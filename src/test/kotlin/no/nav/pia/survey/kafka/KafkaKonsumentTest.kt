@@ -10,6 +10,7 @@ import no.nav.pia.survey.dto.SurveyDto
 import no.nav.pia.survey.dto.SvaralternativDto
 import no.nav.pia.survey.dto.TemaDto
 import no.nav.pia.survey.helper.TestContainerHelper
+import no.nav.pia.survey.helper.TestContainerHelper.Companion.postgresContainer
 import java.time.LocalDateTime
 import java.util.UUID
 import kotlin.test.Test
@@ -17,15 +18,34 @@ import kotlin.test.Test
 class KafkaKonsumentTest {
     @Test
     fun `skal kunne konsumere meldinger fra kafka`() {
-        val id = UUID.randomUUID().toString()
+        val surveyId = UUID.randomUUID().toString()
         TestContainerHelper.kafkaContainer.sendMeldingPåKafka(
-            melding = Json.encodeToString(enSurvey(id)),
+            melding = Json.encodeToString(enSurvey(surveyId)),
         )
-        TestContainerHelper.postgresContainer.hentEnkelKolonne<String>(
+        postgresContainer.hentEnkelKolonne<String>(
             """
-            select type from survey where ekstern_id = '$id'
+            select type from survey where ekstern_id = '$surveyId'
             """.trimIndent(),
         ) shouldBe "Behovsvurdering"
+
+        postgresContainer.hentEnkelKolonne<String>(
+            """
+            select tema.navn from tema join survey on (tema.survey = survey.id)
+             where survey.ekstern_id = '$surveyId'
+             and tema.ekstern_id = '1'
+            """.trimIndent(),
+        ) shouldBe "Tema 1"
+
+        postgresContainer.hentEnkelKolonne<String>(
+            """
+            select sporsmal.tekst from sporsmal 
+             join tema on (sporsmal.tema = tema.id) 
+             join survey on (tema.survey = survey.id)
+             where survey.ekstern_id = '$surveyId'
+             and tema.ekstern_id = '1'
+             and sporsmal.ekstern_id = 'spm_id_1'
+            """.trimIndent(),
+        ) shouldBe "Hva?"
     }
 
     // --
@@ -44,13 +64,13 @@ class KafkaKonsumentTest {
                     navn = "Tema 1",
                     spørsmål = listOf(
                         SpørsmålDto(
-                            id = UUID.randomUUID().toString(),
+                            id = "spm_id_1",
                             tekst = "Hva?",
                             flervalg = false,
                             kategori = null,
                             svaralternativer = listOf(
                                 SvaralternativDto(
-                                    id = UUID.randomUUID().toString(),
+                                    id = "svaralt_id_1",
                                     tekst = "Dette er det riktige svaret",
                                 ),
                             ),
