@@ -45,4 +45,17 @@ class PostgresContainer(
             return rs.getObject(1) as T
         }
     }
+
+    fun <T> hentAlleRaderTilEnkelKolonne(sql: String): List<T> {
+        dataSource.connection.use { connection ->
+            val statement = connection.createStatement()
+            statement.execute(sql)
+            val rs = statement.resultSet
+            val list = mutableListOf<T>()
+            while (rs.next()) {
+                list.add(rs.getObject(1) as T)
+            }
+            return list
+        }
+    }
 }

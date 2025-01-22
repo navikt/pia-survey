@@ -5,6 +5,7 @@ import io.ktor.server.application.ApplicationStopped
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import no.nav.pia.survey.db.SurveyRepository
+import no.nav.pia.survey.domene.SurveyService
 import no.nav.pia.survey.helse.ApplikasjonsHelse
 import no.nav.pia.survey.kafka.KafkaConfig
 import no.nav.pia.survey.kafka.KafkaKonsument
@@ -48,12 +49,13 @@ private fun settOppKonsumenter(
 ) {
     log.info("Setter opp kafkakonsumenter")
     val surveyRepository = SurveyRepository(dataSource = dataSource)
+    val surveyService = SurveyService(surveyRepository = surveyRepository)
     val spørreundersøkelseKonsument = KafkaKonsument(
         kafkaConfig = KafkaConfig(),
         kafkaTopic = KafkaTopics.SPØRREUNDERSØKELSE,
         applikasjonsHelse = applikasjonsHelse,
     ) {
-        surveyRepository.håndterKafkaMelding(it)
+        surveyService.håndterKafkaMelding(it)
     }
     spørreundersøkelseKonsument.startKonsument()
 }

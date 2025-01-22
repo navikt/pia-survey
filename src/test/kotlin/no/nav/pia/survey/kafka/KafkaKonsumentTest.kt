@@ -1,6 +1,7 @@
 package no.nav.pia.survey.kafka
 
 import ia.felles.integrasjoner.kafkameldinger.spørreundersøkelse.SpørreundersøkelseStatus
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.encodeToString
@@ -9,7 +10,7 @@ import no.nav.pia.survey.dto.SpørsmålDto
 import no.nav.pia.survey.dto.SurveyDto
 import no.nav.pia.survey.dto.SvaralternativDto
 import no.nav.pia.survey.dto.TemaDto
-import no.nav.pia.survey.helper.TestContainerHelper
+import no.nav.pia.survey.helper.TestContainerHelper.Companion.kafkaContainer
 import no.nav.pia.survey.helper.TestContainerHelper.Companion.postgresContainer
 import java.time.LocalDateTime
 import java.util.UUID
@@ -17,9 +18,32 @@ import kotlin.test.Test
 
 class KafkaKonsumentTest {
     @Test
-    fun `skal kunne konsumere meldinger fra kafka`() {
+    fun `skal slette surveys basert på status i kafka`() {
+        val survey = enSurvey()
+        kafkaContainer.sendMeldingPåKafka(
+            melding = Json.encodeToString(survey),
+        )
+        postgresContainer.hentEnkelKolonne<String>(
+            """
+            select type from survey where ekstern_id = '${survey.id}'
+            """.trimIndent(),
+        ) shouldBe "Behovsvurdering"
+
+        kafkaContainer.sendMeldingPåKafka(
+            melding = Json.encodeToString(survey.copy(status = SpørreundersøkelseStatus.SLETTET)),
+        )
+
+        postgresContainer.hentAlleRaderTilEnkelKolonne<String>(
+            """
+            select id from survey where ekstern_id = '${survey.id}'
+            """.trimIndent(),
+        ) shouldHaveSize 0
+    }
+
+    @Test
+    fun `skal kunne lagre surveys fra kafka`() {
         val surveyId = UUID.randomUUID().toString()
-        TestContainerHelper.kafkaContainer.sendMeldingPåKafka(
+        kafkaContainer.sendMeldingPåKafka(
             melding = Json.encodeToString(enSurvey(surveyId)),
         )
         postgresContainer.hentEnkelKolonne<String>(
@@ -49,7 +73,7 @@ class KafkaKonsumentTest {
     }
 
     // --
-    private fun enSurvey(id: String): SurveyDto {
+    private fun enSurvey(id: String = UUID.randomUUID().toString()): SurveyDto {
         val opprettet = LocalDateTime.now()
         val gyldigTil = opprettet.plusHours(24L)
         return SurveyDto(

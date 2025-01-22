@@ -1,7 +1,6 @@
 package no.nav.pia.survey.db
 
 import kotlinx.datetime.toJavaLocalDateTime
-import kotlinx.serialization.json.Json
 import kotliquery.queryOf
 import kotliquery.sessionOf
 import kotliquery.using
@@ -15,12 +14,27 @@ import javax.sql.DataSource
 class SurveyRepository(
     val dataSource: DataSource,
 ) {
-    private val json = Json {
-        ignoreUnknownKeys = true
+    fun slettSurvey(survey: SurveyDto) {
+        using(sessionOf(dataSource)) { session ->
+            session.run(
+                queryOf(
+                    """
+                    DELETE FROM survey
+                    WHERE ekstern_id = :eksternId
+                    AND opphav = :opphav
+                    AND type = :type
+                    """.trimIndent(),
+                    mapOf(
+                        "eksternId" to survey.id,
+                        "opphav" to survey.opphav,
+                        "type" to survey.type,
+                    ),
+                ).asUpdate,
+            )
+        }
     }
 
-    fun håndterKafkaMelding(melding: String) {
-        val survey = json.decodeFromString<SurveyDto>(melding)
+    fun lagreSurvey(survey: SurveyDto) {
         using(sessionOf(dataSource)) { session ->
             session.transaction { tx ->
                 val surveyId = UUID.randomUUID().toString()
@@ -118,7 +132,7 @@ class SurveyRepository(
         mapOf(
             "id" to surveyId,
             "eksternId" to survey.id,
-            "opphav" to "fia",
+            "opphav" to survey.opphav,
             "type" to survey.type,
             "status" to survey.status.name,
             "opprettet" to survey.opprettet.toJavaLocalDateTime(),

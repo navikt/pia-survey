@@ -17,4 +17,5 @@ data class SurveyDto(
     val endret: LocalDateTime?,
     val gyldigTil: LocalDateTime,
     val plan: PlanDto?,
+    val opphav: String? = "fia",
 )
