@@ -13,16 +13,15 @@ class SurveyService(
     }
 
     fun håndterKafkaMelding(melding: String) {
-        val survey = json.decodeFromString<SurveyDto>(melding)
-        when (survey.status) {
+        val surveyDto = json.decodeFromString<SurveyDto>(melding)
+        when (surveyDto.status) {
             SpørreundersøkelseStatus.SLETTET -> {
-                surveyRepository.slettSurvey(survey)
-            }
-            SpørreundersøkelseStatus.OPPRETTET -> {
-                surveyRepository.lagreSurvey(survey)
+                surveyRepository.slettSurvey(surveyDto)
             }
             else -> {
-                // TODO - oppdater
+                surveyRepository.hentSurvey(surveyDto.id, surveyDto.opphav, surveyDto.type)?.let {
+                    surveyRepository.oppdaterSurvey(surveyDto)
+                } ?: surveyRepository.lagreSurvey(surveyDto)
             }
         }
     }

@@ -18,6 +18,28 @@ import kotlin.test.Test
 
 class KafkaKonsumentTest {
     @Test
+    fun `skal oppdatere status og endret på mottatte meldinger`() {
+        val survey = enSurvey()
+        kafkaContainer.sendMeldingPåKafka(
+            melding = Json.encodeToString(survey),
+        )
+        postgresContainer.hentEnkelKolonne<String>(
+            """
+            select status from survey where ekstern_id = '${survey.id}'
+            """.trimIndent(),
+        ) shouldBe "OPPRETTET"
+
+        kafkaContainer.sendMeldingPåKafka(
+            melding = Json.encodeToString(survey.copy(status = SpørreundersøkelseStatus.PÅBEGYNT)),
+        )
+        postgresContainer.hentEnkelKolonne<String>(
+            """
+            select status from survey where ekstern_id = '${survey.id}'
+            """.trimIndent(),
+        ) shouldBe "PÅBEGYNT"
+    }
+
+    @Test
     fun `skal slette surveys basert på status i kafka`() {
         val survey = enSurvey()
         kafkaContainer.sendMeldingPåKafka(
