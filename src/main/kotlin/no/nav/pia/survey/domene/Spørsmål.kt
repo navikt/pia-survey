@@ -2,7 +2,7 @@ package no.nav.pia.survey.domene
 
 import java.util.UUID
 
-data class Spørsmål(
+class Spørsmål(
     val id: UUID,
     val eksternId: String,
     val flervalg: Boolean,

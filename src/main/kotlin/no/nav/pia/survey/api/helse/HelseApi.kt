@@ -1,4 +1,4 @@
-package no.nav.pia.survey.helse
+package no.nav.pia.survey.api.helse
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.response.respondText

@@ -3,6 +3,7 @@ package no.nav.pia.survey.db
 import ia.felles.integrasjoner.kafkameldinger.spørreundersøkelse.SpørreundersøkelseStatus
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toKotlinLocalDateTime
+import kotliquery.Row
 import kotliquery.queryOf
 import kotliquery.sessionOf
 import kotliquery.using
@@ -10,16 +11,31 @@ import no.nav.pia.survey.domene.Spørsmål
 import no.nav.pia.survey.domene.Survey
 import no.nav.pia.survey.domene.Svaralternativ
 import no.nav.pia.survey.domene.Tema
-import no.nav.pia.survey.dto.SpørsmålDto
-import no.nav.pia.survey.dto.SurveyDto
-import no.nav.pia.survey.dto.SvaralternativDto
-import no.nav.pia.survey.dto.TemaDto
+import no.nav.pia.survey.kafka.dto.SpørsmålDto
+import no.nav.pia.survey.kafka.dto.SurveyDto
+import no.nav.pia.survey.kafka.dto.SvaralternativDto
+import no.nav.pia.survey.kafka.dto.TemaDto
 import java.util.UUID
 import javax.sql.DataSource
 
 class SurveyRepository(
     val dataSource: DataSource,
 ) {
+    fun hentSurvey(id: UUID) =
+        using(sessionOf(dataSource)) { session ->
+            session.run(
+                queryOf(
+                    """
+                    SELECT * FROM survey
+                    WHERE id = :id
+                    """.trimIndent(),
+                    mapOf(
+                        "id" to id.toString(),
+                    ),
+                ).map(this::mapTilSurvey).asSingle,
+            )
+        }
+
     fun hentSurvey(
         eksternId: String,
         opphav: String,
@@ -38,20 +54,22 @@ class SurveyRepository(
                     "opphav" to opphav,
                     "type" to type,
                 ),
-            ).map { surveyRad ->
-                val id = UUID.fromString(surveyRad.string("id"))
-                Survey(
-                    id = id,
-                    eksternId = surveyRad.string("ekstern_id"),
-                    opphav = surveyRad.string("opphav"),
-                    type = surveyRad.string("type"),
-                    status = SpørreundersøkelseStatus.valueOf(surveyRad.string("status")),
-                    opprettet = surveyRad.localDateTime("opprettet").toKotlinLocalDateTime(),
-                    endret = surveyRad.localDateTimeOrNull("endret")?.toKotlinLocalDateTime(),
-                    gyldigTil = surveyRad.localDateTime("gyldig_til").toKotlinLocalDateTime(),
-                    temaer = hentTemaer(id),
-                )
-            }.asSingle,
+            ).map(this::mapTilSurvey).asSingle,
+        )
+    }
+
+    private fun mapTilSurvey(surveyRad: Row): Survey {
+        val id = UUID.fromString(surveyRad.string("id"))
+        return Survey(
+            id = id,
+            eksternId = surveyRad.string("ekstern_id"),
+            opphav = surveyRad.string("opphav"),
+            type = surveyRad.string("type"),
+            status = SpørreundersøkelseStatus.valueOf(surveyRad.string("status")),
+            opprettet = surveyRad.localDateTime("opprettet").toKotlinLocalDateTime(),
+            endret = surveyRad.localDateTimeOrNull("endret")?.toKotlinLocalDateTime(),
+            gyldigTil = surveyRad.localDateTime("gyldig_til").toKotlinLocalDateTime(),
+            temaer = hentTemaer(id),
         )
     }
 

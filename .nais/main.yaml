@@ -6,6 +6,7 @@ metadata:
 
 spec:
   image: {{image}}
+
   liveness:
     path: /internal/isalive
     port: 8080
@@ -16,14 +17,22 @@ spec:
     port: 8080
     initialDelay: 20
     timeout: 60
+
+  azure:
+    application:
+      enabled: true
+      allowAllUsers: false
+
   kafka:
     pool: {{kafkaPool}}
+
   gcp:
     sqlInstances:
       - type: POSTGRES_17
         tier: {{dbTier}}
         databases:
           - name: pia-survey-db
+
   observability:
     autoInstrumentation:
       enabled: true

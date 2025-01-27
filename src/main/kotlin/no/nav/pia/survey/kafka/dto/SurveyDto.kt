@@ -1,4 +1,4 @@
-package no.nav.pia.survey.dto
+package no.nav.pia.survey.kafka.dto
 
 import ia.felles.integrasjoner.kafkameldinger.spørreundersøkelse.SpørreundersøkelseStatus
 import kotlinx.datetime.LocalDateTime

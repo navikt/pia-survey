@@ -1,9 +1,15 @@
 package no.nav.pia.survey.helper
 
+import ia.felles.integrasjoner.kafkameldinger.spørreundersøkelse.SpørreundersøkelseStatus
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.time.withTimeoutOrNull
+import kotlinx.datetime.toKotlinLocalDateTime
 import no.nav.pia.survey.kafka.KafkaTopics
+import no.nav.pia.survey.kafka.dto.SpørsmålDto
+import no.nav.pia.survey.kafka.dto.SurveyDto
+import no.nav.pia.survey.kafka.dto.SvaralternativDto
+import no.nav.pia.survey.kafka.dto.TemaDto
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.admin.AdminClient
 import org.apache.kafka.clients.admin.AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG
@@ -19,7 +25,9 @@ import org.testcontainers.containers.wait.strategy.HostPortWaitStrategy
 import org.testcontainers.kafka.ConfluentKafkaContainer
 import org.testcontainers.utility.DockerImageName
 import java.time.Duration
+import java.time.LocalDateTime
 import java.util.TimeZone
+import java.util.UUID
 
 class KafkaContainer(
     network: Network,
@@ -114,4 +122,42 @@ class KafkaContainer(
             StringSerializer(),
             StringSerializer(),
         )
+
+    // --
+    fun enSurvey(id: String = UUID.randomUUID().toString()): SurveyDto {
+        val opprettet = LocalDateTime.now()
+        val gyldigTil = opprettet.plusHours(24L)
+        return SurveyDto(
+            id = id,
+            orgnummer = "123456789",
+            samarbeidsNavn = "Samarbeid 1",
+            virksomhetsNavn = "Virksomhet",
+            status = SpørreundersøkelseStatus.OPPRETTET,
+            temaer = listOf(
+                TemaDto(
+                    id = 1,
+                    navn = "Tema 1",
+                    spørsmål = listOf(
+                        SpørsmålDto(
+                            id = "spm_id_1",
+                            tekst = "Hva?",
+                            flervalg = false,
+                            kategori = null,
+                            svaralternativer = listOf(
+                                SvaralternativDto(
+                                    id = "svaralt_id_1",
+                                    tekst = "Dette er det riktige svaret",
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            type = "Behovsvurdering",
+            opprettet = opprettet.toKotlinLocalDateTime(),
+            endret = null,
+            gyldigTil = gyldigTil.toKotlinLocalDateTime(),
+            plan = null,
+        )
+    }
 }

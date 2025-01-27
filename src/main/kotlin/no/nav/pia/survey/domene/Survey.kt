@@ -4,7 +4,7 @@ import ia.felles.integrasjoner.kafkameldinger.spørreundersøkelse.Spørreunders
 import kotlinx.datetime.LocalDateTime
 import java.util.UUID
 
-data class Survey(
+class Survey(
     val id: UUID,
     val eksternId: String,
     val opphav: String,

@@ -1,4 +1,4 @@
-package no.nav.pia.survey.helse
+package no.nav.pia.survey
 
 data class ApplikasjonsHelse(
     var alive: Boolean = true,

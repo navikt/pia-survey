@@ -6,7 +6,6 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import no.nav.pia.survey.db.SurveyRepository
 import no.nav.pia.survey.domene.SurveyService
-import no.nav.pia.survey.helse.ApplikasjonsHelse
 import no.nav.pia.survey.kafka.KafkaConfig
 import no.nav.pia.survey.kafka.KafkaKonsument
 import no.nav.pia.survey.kafka.KafkaTopics
@@ -30,7 +29,12 @@ fun main() {
         factory = Netty,
         port = 8080,
         host = "0.0.0.0",
-        module = { piaSurveyApi(applikasjonsHelse = applikasjonsHelse) },
+        module = {
+            piaSurveyApi(
+                applikasjonsHelse = applikasjonsHelse,
+                surveyService = SurveyService(SurveyRepository(dataSource)),
+            )
+        },
     )
 
     Runtime.getRuntime().addShutdownHook(
@@ -60,10 +64,17 @@ private fun settOppKonsumenter(
     spørreundersøkelseKonsument.startKonsument()
 }
 
-internal fun Application.piaSurveyApi(applikasjonsHelse: ApplikasjonsHelse) {
+internal fun Application.piaSurveyApi(
+    applikasjonsHelse: ApplikasjonsHelse,
+    surveyService: SurveyService,
+) {
     monitor.subscribe(ApplicationStopped) {
         applikasjonsHelse.ready = false
         applikasjonsHelse.alive = false
     }
-    configureRouting(applikasjonsHelse = applikasjonsHelse)
+    configureSerialization()
+    configureRouting(
+        applikasjonsHelse = applikasjonsHelse,
+        surveyService = surveyService,
+    )
 }
