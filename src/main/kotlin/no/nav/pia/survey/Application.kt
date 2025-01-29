@@ -73,6 +73,7 @@ internal fun Application.piaSurveyApi(
         applikasjonsHelse.alive = false
     }
     configureSerialization()
+    configureSecurity()
     configureRouting(
         applikasjonsHelse = applikasjonsHelse,
         surveyService = surveyService,

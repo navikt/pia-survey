@@ -13,6 +13,11 @@ internal object MiljøVariabler {
     // -- DB
     val jdbcUrl = hentMiljøValiabel("NAIS_DATABASE_PIA_SURVEY_PIA_SURVEY_DB_JDBC_URL")
 
+    // -- OBO
+    val azureIssuer: String = System.getenv("AZURE_OPENID_CONFIG_ISSUER")
+    val azureJwksUri: String = System.getenv("AZURE_OPENID_CONFIG_JWKS_URI")
+    val azureClientId: String = System.getenv("AZURE_APP_CLIENT_ID")
+
     private fun hentMiljøValiabel(
         variabelNavn: String,
         defaultVerdi: String? = null,

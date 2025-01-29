@@ -1,6 +1,7 @@
 package no.nav.pia.survey
 
 import io.ktor.server.application.Application
+import io.ktor.server.auth.authenticate
 import io.ktor.server.routing.routing
 import no.nav.pia.survey.api.helse.helse
 import no.nav.pia.survey.api.vert.vertApi
@@ -15,6 +16,8 @@ fun Application.configureRouting(
             lever = { applikasjonsHelse.alive },
             klar = { applikasjonsHelse.ready },
         )
-        vertApi(surveyService = surveyService)
+        authenticate {
+            vertApi(surveyService = surveyService)
+        }
     }
 }
