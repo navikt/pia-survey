@@ -5,9 +5,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.time.withTimeoutOrNull
 import kotlinx.datetime.toKotlinLocalDateTime
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import no.nav.pia.survey.kafka.KafkaTopics
+import no.nav.pia.survey.kafka.dto.SpørreundersøkelseDto
 import no.nav.pia.survey.kafka.dto.SpørsmålDto
-import no.nav.pia.survey.kafka.dto.SurveyDto
 import no.nav.pia.survey.kafka.dto.SvaralternativDto
 import no.nav.pia.survey.kafka.dto.TemaDto
 import org.apache.kafka.clients.CommonClientConfigs
@@ -123,11 +125,25 @@ class KafkaContainer(
             StringSerializer(),
         )
 
+    fun nySurvey(
+        id: String = UUID.randomUUID().toString(),
+        type: String = "Behovsvurdering",
+    ): SpørreundersøkelseDto {
+        val surveyDto = enSurvey(id = id, type = type)
+        sendMeldingPåKafka(
+            melding = Json.encodeToString(surveyDto),
+        )
+        return surveyDto
+    }
+
     // --
-    fun enSurvey(id: String = UUID.randomUUID().toString()): SurveyDto {
+    fun enSurvey(
+        id: String = UUID.randomUUID().toString(),
+        type: String = "Behovsvurdering",
+    ): SpørreundersøkelseDto {
         val opprettet = LocalDateTime.now()
         val gyldigTil = opprettet.plusHours(24L)
-        return SurveyDto(
+        return SpørreundersøkelseDto(
             id = id,
             orgnummer = "123456789",
             samarbeidsNavn = "Samarbeid 1",
@@ -153,7 +169,7 @@ class KafkaContainer(
                     ),
                 ),
             ),
-            type = "Behovsvurdering",
+            type = type,
             opprettet = opprettet.toKotlinLocalDateTime(),
             endret = null,
             gyldigTil = gyldigTil.toKotlinLocalDateTime(),

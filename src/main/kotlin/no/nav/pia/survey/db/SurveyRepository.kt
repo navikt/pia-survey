@@ -11,8 +11,8 @@ import no.nav.pia.survey.domene.Spørsmål
 import no.nav.pia.survey.domene.Survey
 import no.nav.pia.survey.domene.Svaralternativ
 import no.nav.pia.survey.domene.Tema
+import no.nav.pia.survey.kafka.dto.SpørreundersøkelseDto
 import no.nav.pia.survey.kafka.dto.SpørsmålDto
-import no.nav.pia.survey.kafka.dto.SurveyDto
 import no.nav.pia.survey.kafka.dto.SvaralternativDto
 import no.nav.pia.survey.kafka.dto.TemaDto
 import java.util.UUID
@@ -21,6 +21,57 @@ import javax.sql.DataSource
 class SurveyRepository(
     val dataSource: DataSource,
 ) {
+    fun bliMed(
+        surveyId: UUID,
+        sesjonId: UUID,
+    ) = using(sessionOf(dataSource)) { session ->
+        session.run(
+            queryOf(
+                """
+                INSERT INTO deltaker 
+                VALUES (:sesjonId, :surveyId)
+                """.trimIndent(),
+                mapOf(
+                    "sesjonId" to sesjonId,
+                    "surveyId" to surveyId,
+                ),
+            ).asUpdate,
+        )
+    }
+
+    fun hentDeltaker(
+        sesjonId: UUID,
+        surveyId: UUID,
+    ) = using(sessionOf(dataSource)) { session ->
+        session.run(
+            queryOf(
+                """
+                SELECT sesjon_id FROM deltaker
+                WHERE sesjon_id = :sesjonId AND survey = :surveyId
+                """.trimIndent(),
+                mapOf(
+                    "sesjonId" to sesjonId,
+                    "surveyId" to surveyId,
+                ),
+            ).map { UUID.fromString(it.string("sesjon_id")) }.asSingle,
+        )
+    }
+
+    fun hentAntallDeltakere(surveyId: UUID) =
+        using(sessionOf(dataSource)) { session ->
+            session.run(
+                queryOf(
+                    """
+                    SELECT count(sesjon_id) AS antall FROM deltaker
+                    WHERE survey = :surveyId
+                    """.trimIndent(),
+                    mapOf(
+                        "surveyId" to surveyId.toString(),
+                    ),
+                ).map { it.int("antall") }.asSingle,
+            )
+        }
+
     fun hentSurvey(id: UUID) =
         using(sessionOf(dataSource)) { session ->
             session.run(
@@ -142,7 +193,7 @@ class SurveyRepository(
             )
         }
 
-    fun oppdaterSurvey(survey: SurveyDto) {
+    fun oppdaterSurvey(survey: SpørreundersøkelseDto) {
         using(sessionOf(dataSource)) { session ->
             session.run(
                 queryOf(
@@ -164,7 +215,7 @@ class SurveyRepository(
         }
     }
 
-    fun slettSurvey(survey: SurveyDto) {
+    fun slettSurvey(survey: SpørreundersøkelseDto) {
         using(sessionOf(dataSource)) { session ->
             session.run(
                 queryOf(
@@ -184,7 +235,7 @@ class SurveyRepository(
         }
     }
 
-    fun lagreSurvey(survey: SurveyDto) {
+    fun lagreSurvey(survey: SpørreundersøkelseDto) {
         using(sessionOf(dataSource)) { session ->
             session.transaction { tx ->
                 val surveyId = UUID.randomUUID().toString()
@@ -271,7 +322,7 @@ class SurveyRepository(
     ).asUpdate
 
     private fun insertSurvey(
-        survey: SurveyDto,
+        survey: SpørreundersøkelseDto,
         surveyId: String,
     ) = queryOf(
         """

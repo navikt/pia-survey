@@ -6,8 +6,8 @@ import io.ktor.server.response.respondRedirect
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import no.nav.pia.survey.api.dto.tilDto
+import no.nav.pia.survey.api.surveyId
 import no.nav.pia.survey.domene.SurveyService
-import java.util.UUID
 
 const val VERT_BASEPATH = "/vert"
 
@@ -22,16 +22,19 @@ fun Route.vertApi(surveyService: SurveyService) {
         } ?: return@get call.respond(HttpStatusCode.NotFound)
     }
 
-    get("$VERT_BASEPATH/survey/{id}") {
-        val id = call.pathParameters["id"] ?: return@get call.respond(HttpStatusCode.BadRequest, "")
-        val idAsUuuid = try {
-            UUID.fromString(id)
-        } catch (e: Exception) {
-            return@get call.respond(HttpStatusCode.BadRequest, "")
-        }
+    get("$VERT_BASEPATH/survey/{surveyId}") {
+        val surveyId = call.surveyId
 
-        surveyService.hentSurvey(id = idAsUuuid)?.let {
+        surveyService.hentSurvey(id = surveyId)?.let {
             return@get call.respond(it.tilDto())
+        } ?: return@get call.respond(HttpStatusCode.NotFound)
+    }
+
+    get("$VERT_BASEPATH/survey/{surveyId}/antall-deltakere") {
+        val surveyId = call.surveyId
+
+        surveyService.hentSurvey(surveyId)?.let {
+            return@get call.respond(surveyService.hentAntallDeltakere(surveyId))
         } ?: return@get call.respond(HttpStatusCode.NotFound)
     }
 }

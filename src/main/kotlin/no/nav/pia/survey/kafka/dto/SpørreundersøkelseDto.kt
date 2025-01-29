@@ -5,7 +5,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SurveyDto(
+data class SpørreundersøkelseDto(
     val id: String,
     val orgnummer: String = "",
     val samarbeidsNavn: String = "",
