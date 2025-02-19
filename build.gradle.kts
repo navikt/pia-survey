@@ -1,7 +1,7 @@
 
 plugins {
-    kotlin("jvm") version "2.1.0"
-    kotlin("plugin.serialization") version "2.1.0"
+    kotlin("jvm") version "2.1.10"
+    kotlin("plugin.serialization") version "2.1.10"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
@@ -12,8 +12,8 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val ktorVersion = "3.0.3"
-val kotlinVersion = "2.1.0"
+val ktorVersion = "3.1.0"
+val kotlinVersion = "2.1.10"
 val kotestVersion = "5.9.1"
 val testcontainersVersion = "1.20.4"
 
@@ -34,15 +34,15 @@ dependencies {
     implementation("net.logstash.logback:logstash-logback-encoder:8.0")
 
     // -- DB
-    implementation("org.postgresql:postgresql:42.7.4")
+    implementation("org.postgresql:postgresql:42.7.5")
     implementation("com.zaxxer:HikariCP:6.2.1")
-    implementation("org.flywaydb:flyway-database-postgresql:11.1.1")
+    implementation("org.flywaydb:flyway-database-postgresql:11.3.3")
     implementation("com.github.seratch:kotliquery:1.9.1")
 
     // -- div
     implementation("com.github.navikt:ia-felles:1.9.0")
     implementation("org.apache.kafka:kafka-clients:3.9.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 
     // ----------- test
     testImplementation("org.testcontainers:kafka:$testcontainersVersion")
