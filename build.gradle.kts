@@ -52,6 +52,17 @@ dependencies {
     testImplementation("io.ktor:ktor-client-cio:$ktorVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
     testImplementation("no.nav.security:mock-oauth2-server:2.1.10")
+
+    constraints {
+        implementation("net.minidev:json-smart") {
+            version {
+                require("2.5.2")
+            }
+            because(
+                "versjoner < 2.5.2 har diverse sårbarheter",
+            )
+        }
+    }
 }
 
 tasks {
