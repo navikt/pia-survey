@@ -87,6 +87,67 @@ class SurveyRepository(
             )
         }
 
+    fun hentTema(
+        surveyId: UUID,
+        temaId: UUID,
+    ) = using(sessionOf(dataSource)) { session ->
+        session.run(
+            queryOf(
+                """
+                SELECT * FROM tema
+                WHERE survey = :surveyId
+                AND id = :temaId
+                """.trimIndent(),
+                mapOf(
+                    "surveyId" to surveyId.toString(),
+                    "temaId" to temaId.toString(),
+                ),
+            ).map(this::mapTilTema).asSingle,
+        )
+    }
+
+    private fun mapTilTema(row: Row): Tema {
+        val id = UUID.fromString(row.string("id"))
+        return Tema(
+            id = id,
+            eksternId = row.string("ekstern_id"),
+            navn = row.string("navn"),
+            status = Tema.Companion.Status.valueOf(row.string("status")),
+            spørsmål = hentSpørsmål(id),
+        )
+    }
+
+    fun oppdaterTemaStatus(
+        temaId: UUID,
+        status: Tema.Companion.Status,
+    ) = using(sessionOf(dataSource)) { session ->
+        session.transaction { transaction ->
+            transaction.run(
+                queryOf(
+                    """
+                    UPDATE tema SET STATUS = :status
+                    WHERE id = :temaId
+                    """.trimIndent(),
+                    mapOf(
+                        "temaId" to temaId.toString(),
+                        "status" to status.name,
+                    ),
+                ).asUpdate,
+            )
+            transaction.run(
+                queryOf(
+                    """
+                    SELECT * FROM tema
+                    WHERE id = :temaId
+                    """.trimIndent(),
+                    mapOf(
+                        "temaId" to temaId.toString(),
+                    ),
+                ).map(this::mapTilTema).asSingle,
+            )
+        }
+    }
+
     fun hentSurvey(
         eksternId: String,
         opphav: String,
@@ -135,15 +196,7 @@ class SurveyRepository(
                     mapOf(
                         "surveyId" to surveyId.toString(),
                     ),
-                ).map { temaRad ->
-                    val id = UUID.fromString(temaRad.string("id"))
-                    Tema(
-                        id = id,
-                        eksternId = temaRad.string("ekstern_id"),
-                        navn = temaRad.string("navn"),
-                        spørsmål = hentSpørsmål(id),
-                    )
-                }.asList,
+                ).map(this::mapTilTema).asList,
             )
         }
 

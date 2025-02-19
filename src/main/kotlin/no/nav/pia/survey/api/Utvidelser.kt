@@ -8,4 +8,10 @@ internal val ApplicationCall.surveyId
     get() =
         parameters["surveyId"]?.let {
             UUID.fromString(it)
-        } ?: throw Feil(feilmelding = "", feilkode = HttpStatusCode.BadRequest)
+        } ?: throw Feil(feilmelding = "Mangler surveyId", feilkode = HttpStatusCode.BadRequest)
+
+internal val ApplicationCall.temaId
+    get() =
+        parameters["temaId"]?.let {
+            UUID.fromString(it)
+        } ?: throw Feil(feilmelding = "Mangler temaId", feilkode = HttpStatusCode.BadRequest)

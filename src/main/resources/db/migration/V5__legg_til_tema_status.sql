@@ -1,0 +1,1 @@
+ALTER TABLE tema ADD status varchar NOT NULL DEFAULT 'IKKE_STARTET';

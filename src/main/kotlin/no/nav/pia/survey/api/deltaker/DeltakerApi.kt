@@ -13,7 +13,6 @@ import no.nav.pia.survey.domene.SurveyService
 import java.util.UUID
 
 const val BLI_MED_PATH = "/bli-med"
-const val DELTAKER_BASEPATH = "/deltaker"
 
 fun Route.bliMedApi(surveyService: SurveyService) {
     post(BLI_MED_PATH) {
@@ -36,6 +35,9 @@ fun Route.bliMedApi(surveyService: SurveyService) {
     }
 }
 
+const val DELTAKER_BASEPATH = "/deltaker"
+
 fun Route.deltakerApi(surveyService: SurveyService) {
-    get("$DELTAKER_BASEPATH/{surveyId}") { }
+    get("$DELTAKER_BASEPATH/{surveyId}") {
+    }
 }

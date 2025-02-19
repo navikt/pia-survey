@@ -21,6 +21,17 @@ private val httpClient = HttpClient(CIO) {
     followRedirects = true
 }
 
+internal suspend inline fun <reified T> GenericContainer<*>.performPut(
+    url: String,
+    body: T,
+    crossinline config: HttpRequestBuilder.() -> Unit = {},
+) = performRequest(url) {
+    config()
+    method = HttpMethod.Put
+    header(HttpHeaders.ContentType, ContentType.Application.Json)
+    setBody(body)
+}
+
 internal suspend inline fun <reified T> GenericContainer<*>.performPost(
     url: String,
     body: T,

@@ -8,6 +8,7 @@ data class TemaDto(
     val id: String,
     val navn: String,
     val spørsmål: List<SpørsmålDto>,
+    val status: Tema.Companion.Status,
 )
 
 fun List<Tema>.tilDto() = map { it.tilDto() }
@@ -17,4 +18,5 @@ fun Tema.tilDto() =
         id = id.toString(),
         navn = navn,
         spørsmål = spørsmål.tilDto(),
+        status = status,
     )

@@ -7,4 +7,13 @@ class Tema(
     val eksternId: String,
     val navn: String,
     val spørsmål: List<Spørsmål>,
-)
+    val status: Status,
+) {
+    companion object {
+        enum class Status {
+            IKKE_STARTET,
+            STARTET,
+            AVSLUTTET,
+        }
+    }
+}
