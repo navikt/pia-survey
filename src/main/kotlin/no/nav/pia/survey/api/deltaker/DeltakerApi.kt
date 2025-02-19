@@ -7,8 +7,11 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import no.nav.pia.survey.api.Feil
+import no.nav.pia.survey.api.StandarFeil
 import no.nav.pia.survey.api.dto.BliMedDto
 import no.nav.pia.survey.api.dto.BliMedRequest
+import no.nav.pia.survey.api.dto.IdentifiserbartSpørsmålDto
+import no.nav.pia.survey.api.surveyId
 import no.nav.pia.survey.domene.SurveyService
 import java.util.UUID
 
@@ -24,7 +27,7 @@ fun Route.bliMedApi(surveyService: SurveyService) {
         }
 
         val sesjonId = surveyService.bliMed(surveyId)
-            ?: throw Feil(feilmelding = "Fant ikke survey", feilkode = HttpStatusCode.NotFound)
+            ?: throw StandarFeil.fantIkkeSurvey
 
         call.respond(
             BliMedDto(
@@ -39,5 +42,16 @@ const val DELTAKER_BASEPATH = "/deltaker"
 
 fun Route.deltakerApi(surveyService: SurveyService) {
     get("$DELTAKER_BASEPATH/{surveyId}") {
+        val surveyId = call.surveyId
+
+        val survey = surveyService.hentSurvey(surveyId) ?: throw StandarFeil.fantIkkeSurvey
+        val førsteTema = survey.temaer.first()
+        val førsteSpørsmål = førsteTema.spørsmål.first()
+        call.respond(
+            IdentifiserbartSpørsmålDto(
+                temaId = førsteTema.id.toString(),
+                spørsmålId = førsteSpørsmål.id.toString(),
+            ),
+        )
     }
 }

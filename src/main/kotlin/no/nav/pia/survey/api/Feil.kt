@@ -7,3 +7,7 @@ internal class Feil(
     val opprinneligException: Throwable? = null,
     val feilkode: HttpStatusCode,
 ) : Throwable(feilmelding, opprinneligException)
+
+internal object StandarFeil {
+    val fantIkkeSurvey = Feil(feilmelding = "Fant ikke survey", feilkode = HttpStatusCode.NotFound)
+}

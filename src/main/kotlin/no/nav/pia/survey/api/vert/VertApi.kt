@@ -6,6 +6,8 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.put
+import no.nav.pia.survey.api.Feil
+import no.nav.pia.survey.api.StandarFeil
 import no.nav.pia.survey.api.dto.tilDto
 import no.nav.pia.survey.api.surveyId
 import no.nav.pia.survey.api.temaId
@@ -16,13 +18,13 @@ const val VERT_BASEPATH = "/vert"
 
 fun Route.vertApi(surveyService: SurveyService) {
     get("$VERT_BASEPATH/landing/{opphav}/{type}/{eksternId}") {
-        val opphav = call.parameters["opphav"] ?: return@get call.respond(status = HttpStatusCode.BadRequest, message = "")
-        val type = call.parameters["type"] ?: return@get call.respond(status = HttpStatusCode.BadRequest, message = "")
-        val eksternId = call.parameters["eksternId"] ?: return@get call.respond(status = HttpStatusCode.BadRequest, message = "")
+        val opphav = call.parameters["opphav"] ?: throw Feil(feilmelding = "Mangler opphav", feilkode = HttpStatusCode.BadRequest)
+        val type = call.parameters["type"] ?: throw Feil(feilmelding = "Mangler type", feilkode = HttpStatusCode.BadRequest)
+        val eksternId = call.parameters["eksternId"] ?: throw Feil(feilmelding = "Mangler eksternId", feilkode = HttpStatusCode.BadRequest)
 
         surveyService.hentSurvey(opphav = opphav, type = type, eksternId = eksternId)?.let {
             return@get call.respond(it.tilDto())
-        } ?: return@get call.respond(HttpStatusCode.NotFound)
+        } ?: throw StandarFeil.fantIkkeSurvey
     }
 
     get("$VERT_BASEPATH/survey/{surveyId}") {
@@ -30,7 +32,7 @@ fun Route.vertApi(surveyService: SurveyService) {
 
         surveyService.hentSurvey(id = surveyId)?.let {
             return@get call.respond(it.tilDto())
-        } ?: return@get call.respond(HttpStatusCode.NotFound)
+        } ?: throw StandarFeil.fantIkkeSurvey
     }
 
     get("$VERT_BASEPATH/antall-deltakere/{surveyId}") {
@@ -38,7 +40,7 @@ fun Route.vertApi(surveyService: SurveyService) {
 
         surveyService.hentSurvey(surveyId)?.let {
             return@get call.respond(surveyService.hentAntallDeltakere(surveyId))
-        } ?: return@get call.respond(HttpStatusCode.NotFound)
+        } ?: throw StandarFeil.fantIkkeSurvey
     }
 
     put("$VERT_BASEPATH/status/{surveyId}/{temaId}") {
@@ -49,7 +51,7 @@ fun Route.vertApi(surveyService: SurveyService) {
         surveyService.hentTema(surveyId, temaId)?.let { tema ->
             surveyService.oppdaterTemaStatus(tema, status)?.let {
                 return@put call.respond(it.tilDto())
-            } ?: call.respond(HttpStatusCode.InternalServerError)
-        } ?: call.respond(HttpStatusCode.NotFound)
+            } ?: throw Feil(feilmelding = "Kunne ikke oppdatere tema status", feilkode = HttpStatusCode.InternalServerError)
+        } ?: throw StandarFeil.fantIkkeSurvey
     }
 }

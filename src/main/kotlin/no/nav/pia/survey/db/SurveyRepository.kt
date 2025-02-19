@@ -50,8 +50,8 @@ class SurveyRepository(
                 WHERE sesjon_id = :sesjonId AND survey = :surveyId
                 """.trimIndent(),
                 mapOf(
-                    "sesjonId" to sesjonId,
-                    "surveyId" to surveyId,
+                    "sesjonId" to sesjonId.toString(),
+                    "surveyId" to surveyId.toString(),
                 ),
             ).map { UUID.fromString(it.string("sesjon_id")) }.asSingle,
         )
