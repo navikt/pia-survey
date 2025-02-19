@@ -2,7 +2,7 @@
 plugins {
     kotlin("jvm") version "2.1.10"
     kotlin("plugin.serialization") version "2.1.10"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "8.3.5"
 }
 
 group = "no.nav"
@@ -40,7 +40,7 @@ dependencies {
     implementation("com.github.seratch:kotliquery:1.9.1")
 
     // -- div
-    implementation("com.github.navikt:ia-felles:1.9.0")
+    implementation("com.github.navikt:ia-felles:1.10.2")
     implementation("org.apache.kafka:kafka-clients:3.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 
