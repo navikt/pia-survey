@@ -62,6 +62,14 @@ dependencies {
                 "versjoner < 2.5.2 har diverse sårbarheter",
             )
         }
+        implementation("io.netty:netty-codec-http2") {
+            version {
+                require("4.1.118.Final")
+            }
+            because(
+                "Versjoner <4.1.117 er sårbare. Inkludert i ktor 3.1.0",
+            )
+        }
     }
 }
 
