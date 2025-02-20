@@ -45,10 +45,10 @@ class KafkaKonsument(
         log.info("Lytter nå på topic: ${kafkaTopic.navnMedNamespace}")
         while (applikasjonsHelse.ready) {
             konsument.poll(Duration.ofMillis(10))
-                .map {
-                    it.value()
+                .map { melding ->
+                    log.info("Mottok kafkamelding med nøkkel: ${melding.key()}")
+                    melding.value()
                 }.forEach { survey ->
-                    log.info("Mottok kafkamelding med nøkkel: $survey")
                     block(survey)
                 }
             konsument.commitAsync()
