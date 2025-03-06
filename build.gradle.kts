@@ -12,10 +12,10 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val ktorVersion = "3.1.0"
+val ktorVersion = "3.1.1"
 val kotlinVersion = "2.1.10"
 val kotestVersion = "5.9.1"
-val testcontainersVersion = "1.20.4"
+val testcontainersVersion = "1.20.6"
 
 dependencies {
     // -- ktor
@@ -30,13 +30,13 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages-jvm:$ktorVersion")
 
     // -- logs
-    implementation("ch.qos.logback:logback-classic:1.5.16")
+    implementation("ch.qos.logback:logback-classic:1.5.17")
     implementation("net.logstash.logback:logstash-logback-encoder:8.0")
 
     // -- DB
     implementation("org.postgresql:postgresql:42.7.5")
     implementation("com.zaxxer:HikariCP:6.2.1")
-    implementation("org.flywaydb:flyway-database-postgresql:11.3.3")
+    implementation("org.flywaydb:flyway-database-postgresql:11.3.4")
     implementation("com.github.seratch:kotliquery:1.9.1")
 
     // -- div
@@ -64,7 +64,7 @@ dependencies {
         }
         implementation("io.netty:netty-codec-http2") {
             version {
-                require("4.1.118.Final")
+                require("4.1.119.Final")
             }
             because(
                 "Versjoner <4.1.117 er sårbare. Inkludert i ktor 3.1.0",
