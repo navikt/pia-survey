@@ -51,7 +51,7 @@ class KafkaKonsument(
                 }.forEach { survey ->
                     block(survey)
                 }
-            konsument.commitAsync()
+            konsument.commitSync()
         }
     }
 }
