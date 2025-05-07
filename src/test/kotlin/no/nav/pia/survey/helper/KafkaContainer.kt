@@ -5,7 +5,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.time.withTimeoutOrNull
 import kotlinx.datetime.toKotlinLocalDateTime
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import no.nav.pia.survey.kafka.KafkaTopics
 import no.nav.pia.survey.kafka.dto.SpørreundersøkelseDto
@@ -39,7 +38,7 @@ class KafkaContainer(
     private var adminClient: AdminClient
 
     val container = ConfluentKafkaContainer(
-        DockerImageName.parse("confluentinc/cp-kafka:7.6.0"),
+        DockerImageName.parse("confluentinc/cp-kafka:7.8.2"),
     )
         .withNetwork(network)
         .withNetworkAliases(containerAlias)
