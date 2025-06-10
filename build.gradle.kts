@@ -41,7 +41,7 @@ dependencies {
 
     // -- div
     implementation("com.github.navikt:ia-felles:1.10.2")
-    implementation("org.apache.kafka:kafka-clients:3.9.0")
+    implementation("org.apache.kafka:kafka-clients:3.9.1")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 
     // ----------- test
