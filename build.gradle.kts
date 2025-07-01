@@ -1,7 +1,7 @@
 
 plugins {
-    kotlin("jvm") version "2.1.20"
-    kotlin("plugin.serialization") version "2.1.20"
+    kotlin("jvm") version "2.2.0"
+    kotlin("plugin.serialization") version "2.2.0"
     id("com.gradleup.shadow") version "8.3.5"
 }
 
@@ -13,7 +13,7 @@ repositories {
 }
 
 val ktorVersion = "3.1.3"
-val kotlinVersion = "2.1.20"
+val kotlinVersion = "2.2.0"
 val kotestVersion = "5.9.1"
 val testcontainersVersion = "1.21.0"
 
