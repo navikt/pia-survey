@@ -15,7 +15,7 @@ repositories {
 val ktorVersion = "3.2.0"
 val kotlinVersion = "2.2.0"
 val kotestVersion = "5.9.1"
-val testcontainersVersion = "1.21.0"
+val testcontainersVersion = "1.21.3"
 
 dependencies {
     // -- ktor
@@ -34,14 +34,14 @@ dependencies {
     implementation("net.logstash.logback:logstash-logback-encoder:8.1")
 
     // -- DB
-    implementation("org.postgresql:postgresql:42.7.5")
+    implementation("org.postgresql:postgresql:42.7.7")
     implementation("com.zaxxer:HikariCP:6.3.0")
-    implementation("org.flywaydb:flyway-database-postgresql:11.8.1")
+    implementation("org.flywaydb:flyway-database-postgresql:11.10.0")
     implementation("com.github.seratch:kotliquery:1.9.1")
 
     // -- div
     implementation("com.github.navikt:ia-felles:1.10.2")
-    implementation("org.apache.kafka:kafka-clients:3.9.0")
+    implementation("org.apache.kafka:kafka-clients:3.9.1")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 
     // ----------- test
@@ -51,25 +51,9 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
     testImplementation("io.ktor:ktor-client-cio:$ktorVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
-    testImplementation("no.nav.security:mock-oauth2-server:2.1.10")
+    testImplementation("no.nav.security:mock-oauth2-server:2.2.1")
 
     constraints {
-        implementation("net.minidev:json-smart") {
-            version {
-                require("2.5.2")
-            }
-            because(
-                "versjoner < 2.5.2 har diverse sårbarheter",
-            )
-        }
-        implementation("io.netty:netty-codec-http2") {
-            version {
-                require("4.2.0.Final")
-            }
-            because(
-                "Versjoner <4.1.117 er sårbare. Inkludert i ktor 3.1.0",
-            )
-        }
         testImplementation("org.apache.commons:commons-compress") {
             version {
                 require("1.27.1")
