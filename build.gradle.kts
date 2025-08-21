@@ -12,7 +12,7 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val ktorVersion = "3.2.0"
+val ktorVersion = "3.2.3"
 val kotlinVersion = "2.2.0"
 val kotestVersion = "5.9.1"
 val testcontainersVersion = "1.21.3"
@@ -35,13 +35,13 @@ dependencies {
 
     // -- DB
     implementation("org.postgresql:postgresql:42.7.7")
-    implementation("com.zaxxer:HikariCP:6.3.0")
-    implementation("org.flywaydb:flyway-database-postgresql:11.10.0")
+    implementation("com.zaxxer:HikariCP:7.0.0")
+    implementation("org.flywaydb:flyway-database-postgresql:11.10.5")
     implementation("com.github.seratch:kotliquery:1.9.1")
 
     // -- div
     implementation("com.github.navikt:ia-felles:1.10.2")
-    implementation("org.apache.kafka:kafka-clients:3.9.1")
+    implementation("org.apache.kafka:kafka-clients:4.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 
     // ----------- test
@@ -56,7 +56,7 @@ dependencies {
     constraints {
         testImplementation("org.apache.commons:commons-compress") {
             version {
-                require("1.27.1")
+                require("1.28.0")
             }
             because("testcontainers har sårbar versjon")
         }
