@@ -40,7 +40,6 @@ dependencies {
     implementation("com.github.seratch:kotliquery:1.9.1")
 
     // -- div
-    implementation("com.github.navikt:ia-felles:1.10.2")
     implementation("org.apache.kafka:kafka-clients:4.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 

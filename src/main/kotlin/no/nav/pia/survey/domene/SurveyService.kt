@@ -1,6 +1,5 @@
 package no.nav.pia.survey.domene
 
-import ia.felles.integrasjoner.kafkameldinger.spørreundersøkelse.SpørreundersøkelseStatus
 import kotlinx.serialization.json.Json
 import no.nav.pia.survey.db.SurveyRepository
 import no.nav.pia.survey.kafka.dto.SpørreundersøkelseDto
@@ -43,7 +42,7 @@ class SurveyService(
     fun håndterKafkaMelding(melding: String) {
         val spørreundersøkelseDto = json.decodeFromString<SpørreundersøkelseDto>(melding)
         when (spørreundersøkelseDto.status) {
-            SpørreundersøkelseStatus.SLETTET -> {
+            Survey.Status.SLETTET -> {
                 surveyRepository.slettSurvey(spørreundersøkelseDto)
             }
             else -> {

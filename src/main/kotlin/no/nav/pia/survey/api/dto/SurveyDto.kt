@@ -1,6 +1,5 @@
 package no.nav.pia.survey.api.dto
 
-import ia.felles.integrasjoner.kafkameldinger.spørreundersøkelse.SpørreundersøkelseStatus
 import kotlinx.serialization.Serializable
 import no.nav.pia.survey.domene.Survey
 
@@ -8,7 +7,7 @@ import no.nav.pia.survey.domene.Survey
 data class SurveyDto(
     val id: String,
     val type: String,
-    val status: SpørreundersøkelseStatus,
+    val status: Survey.Status,
     val temaer: List<TemaDto>,
 )
 

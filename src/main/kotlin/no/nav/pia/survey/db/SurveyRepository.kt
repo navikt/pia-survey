@@ -1,6 +1,5 @@
 package no.nav.pia.survey.db
 
-import ia.felles.integrasjoner.kafkameldinger.spørreundersøkelse.SpørreundersøkelseStatus
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toKotlinLocalDateTime
 import kotliquery.Row
@@ -177,7 +176,7 @@ class SurveyRepository(
             eksternId = surveyRad.string("ekstern_id"),
             opphav = surveyRad.string("opphav"),
             type = surveyRad.string("type"),
-            status = SpørreundersøkelseStatus.valueOf(surveyRad.string("status")),
+            status = Survey.Status.valueOf(surveyRad.string("status")),
             opprettet = surveyRad.localDateTime("opprettet").toKotlinLocalDateTime(),
             endret = surveyRad.localDateTimeOrNull("endret")?.toKotlinLocalDateTime(),
             gyldigTil = surveyRad.localDateTime("gyldig_til").toKotlinLocalDateTime(),

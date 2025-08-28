@@ -1,11 +1,11 @@
 package no.nav.pia.survey.helper
 
-import ia.felles.integrasjoner.kafkameldinger.spørreundersøkelse.SpørreundersøkelseStatus
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.time.withTimeoutOrNull
 import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.json.Json
+import no.nav.pia.survey.domene.Survey
 import no.nav.pia.survey.kafka.KafkaTopics
 import no.nav.pia.survey.kafka.dto.SpørreundersøkelseDto
 import no.nav.pia.survey.kafka.dto.SpørsmålDto
@@ -147,7 +147,7 @@ class KafkaContainer(
             orgnummer = "123456789",
             samarbeidsNavn = "Samarbeid 1",
             virksomhetsNavn = "Virksomhet",
-            status = SpørreundersøkelseStatus.OPPRETTET,
+            status = Survey.Status.OPPRETTET,
             temaer = listOf(
                 TemaDto(
                     id = 1,

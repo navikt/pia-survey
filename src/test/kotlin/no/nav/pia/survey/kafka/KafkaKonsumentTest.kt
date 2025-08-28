@@ -1,10 +1,9 @@
 package no.nav.pia.survey.kafka
 
-import ia.felles.integrasjoner.kafkameldinger.spørreundersøkelse.SpørreundersøkelseStatus
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import no.nav.pia.survey.domene.Survey
 import no.nav.pia.survey.helper.TestContainerHelper.Companion.kafkaContainer
 import no.nav.pia.survey.helper.TestContainerHelper.Companion.postgresContainer
 import java.util.UUID
@@ -24,7 +23,7 @@ class KafkaKonsumentTest {
         ) shouldBe "OPPRETTET"
 
         kafkaContainer.sendMeldingPåKafka(
-            melding = Json.encodeToString(survey.copy(status = SpørreundersøkelseStatus.PÅBEGYNT)),
+            melding = Json.encodeToString(survey.copy(status = Survey.Status.PÅBEGYNT)),
         )
         postgresContainer.hentEnkelKolonne<String>(
             """
@@ -46,7 +45,7 @@ class KafkaKonsumentTest {
         ) shouldBe "Behovsvurdering"
 
         kafkaContainer.sendMeldingPåKafka(
-            melding = Json.encodeToString(survey.copy(status = SpørreundersøkelseStatus.SLETTET)),
+            melding = Json.encodeToString(survey.copy(status = Survey.Status.SLETTET)),
         )
 
         postgresContainer.hentAlleRaderTilEnkelKolonne<String>(
