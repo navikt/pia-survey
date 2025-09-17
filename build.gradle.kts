@@ -1,7 +1,7 @@
 
 plugins {
-    kotlin("jvm") version "2.2.0"
-    kotlin("plugin.serialization") version "2.2.0"
+    kotlin("jvm") version "2.2.20"
+    kotlin("plugin.serialization") version "2.2.20"
     id("com.gradleup.shadow") version "8.3.5"
 }
 
@@ -12,9 +12,9 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val ktorVersion = "3.2.3"
-val kotlinVersion = "2.2.0"
-val kotestVersion = "5.9.1"
+val ktorVersion = "3.3.0"
+val kotlinVersion = "2.2.20"
+val kotestVersion = "6.0.3"
 val testcontainersVersion = "1.21.3"
 
 dependencies {
@@ -35,13 +35,13 @@ dependencies {
 
     // -- DB
     implementation("org.postgresql:postgresql:42.7.7")
-    implementation("com.zaxxer:HikariCP:7.0.0")
-    implementation("org.flywaydb:flyway-database-postgresql:11.10.5")
+    implementation("com.zaxxer:HikariCP:7.0.2")
+    implementation("org.flywaydb:flyway-database-postgresql:11.13.0")
     implementation("com.github.seratch:kotliquery:1.9.1")
 
     // -- div
-    implementation("org.apache.kafka:kafka-clients:4.0.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
+    implementation("org.apache.kafka:kafka-clients:4.1.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1-0.6.x-compat")
 
     // ----------- test
     testImplementation("org.testcontainers:kafka:$testcontainersVersion")
@@ -50,12 +50,12 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
     testImplementation("io.ktor:ktor-client-cio:$ktorVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
-    testImplementation("no.nav.security:mock-oauth2-server:2.2.1")
+    testImplementation("no.nav.security:mock-oauth2-server:2.3.0")
 
     constraints {
         implementation("io.netty:netty-codec-http2") {
             version {
-                require("4.2.4.Final")
+                require("4.2.6.Final")
             }
             because(
                 "ktor-server-netty har sårbar versjon",
