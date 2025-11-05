@@ -2,7 +2,7 @@
 plugins {
     kotlin("jvm") version "2.2.20"
     kotlin("plugin.serialization") version "2.2.20"
-    id("com.gradleup.shadow") version "8.3.5"
+    id("application")
 }
 
 group = "no.nav"
@@ -72,13 +72,7 @@ dependencies {
 }
 
 tasks {
-    shadowJar {
-        mergeServiceFiles()
-        manifest {
-            attributes("Main-Class" to "no.nav.pia.survey.ApplicationKt")
-        }
-    }
     test {
-        dependsOn(shadowJar)
+        dependsOn(installDist)
     }
 }
