@@ -1,7 +1,7 @@
 
 plugins {
-    kotlin("jvm") version "2.2.21"
-    kotlin("plugin.serialization") version "2.2.21"
+    kotlin("jvm") version "2.3.10"
+    kotlin("plugin.serialization") version "2.3.10"
     id("application")
 }
 
@@ -12,9 +12,9 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val ktorVersion = "3.3.3"
-val kotlinVersion = "2.2.21"
-val kotestVersion = "6.0.7"
+val ktorVersion = "3.4.0"
+val kotlinVersion = "2.3.10"
+val kotestVersion = "6.1.4"
 val testcontainersVersion = "2.0.3"
 
 dependencies {
@@ -30,21 +30,21 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages-jvm:$ktorVersion")
 
     // -- logs
-    implementation("ch.qos.logback:logback-classic:1.5.24")
+    implementation("ch.qos.logback:logback-classic:1.5.32")
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
 
     // -- DB
-    implementation("org.postgresql:postgresql:42.7.9")
+    implementation("org.postgresql:postgresql:42.7.10")
     implementation("com.zaxxer:HikariCP:7.0.2")
-    implementation("org.flywaydb:flyway-database-postgresql:11.20.2")
+    implementation("org.flywaydb:flyway-database-postgresql:12.0.2")
     implementation("com.github.seratch:kotliquery:1.9.1")
 
     // -- div
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1-0.6.x-compat")
 
     // Kafka
-    implementation("at.yawk.lz4:lz4-java:1.10.2")
-    implementation("org.apache.kafka:kafka-clients:4.1.1") {
+    implementation("at.yawk.lz4:lz4-java:1.10.3")
+    implementation("org.apache.kafka:kafka-clients:4.2.0") {
         // "Fikser CVE-2025-12183 - lz4-java >1.8.1 har sårbar versjon (transitive dependency fra kafka-clients:4.1.0)"
         exclude("org.lz4", "lz4-java")
     }
