@@ -1,7 +1,7 @@
 
 plugins {
-    kotlin("jvm") version "2.3.10"
-    kotlin("plugin.serialization") version "2.3.10"
+    kotlin("jvm") version "2.3.20"
+    kotlin("plugin.serialization") version "2.3.20"
     id("application")
 }
 
@@ -12,10 +12,10 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val ktorVersion = "3.4.1"
-val kotlinVersion = "2.3.10"
-val kotestVersion = "6.1.7"
-val testcontainersVersion = "2.0.3"
+val ktorVersion = "3.4.2"
+val kotlinVersion = "2.3.20"
+val kotestVersion = "6.1.10"
+val testcontainersVersion = "2.0.4"
 
 dependencies {
     // -- ktor
@@ -36,7 +36,7 @@ dependencies {
     // -- DB
     implementation("org.postgresql:postgresql:42.7.10")
     implementation("com.zaxxer:HikariCP:7.0.2")
-    implementation("org.flywaydb:flyway-database-postgresql:12.1.0")
+    implementation("org.flywaydb:flyway-database-postgresql:12.2.0")
     implementation("com.github.seratch:kotliquery:1.9.1")
 
     // -- div
