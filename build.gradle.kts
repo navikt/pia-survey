@@ -34,13 +34,13 @@ dependencies {
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
 
     // -- DB
-    implementation("org.postgresql:postgresql:42.7.10")
+    implementation("org.postgresql:postgresql:42.7.11")
     implementation("com.zaxxer:HikariCP:7.0.2")
-    implementation("org.flywaydb:flyway-database-postgresql:12.4.0")
+    implementation("org.flywaydb:flyway-database-postgresql:12.6.0")
     implementation("com.github.seratch:kotliquery:1.9.1")
 
     // -- div
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1-0.6.x-compat")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.8.0-0.6.x-compat")
 
     // Kafka
     implementation("at.yawk.lz4:lz4-java:1.11.0")
@@ -56,7 +56,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
     testImplementation("io.ktor:ktor-client-cio:$ktorVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
-    testImplementation("no.nav.security:mock-oauth2-server:3.0.1")
+    testImplementation("no.nav.security:mock-oauth2-server:3.0.3")
 
     constraints {
         implementation("com.fasterxml.jackson.core:jackson-core") {
@@ -80,7 +80,7 @@ dependencies {
                 require("1.84")
             }
             because(
-                "versjoner < 1.84 har sårbarhet. inkludert i no.nav.security:mock-oauth2-server:3.0.1",
+                "versjoner < 1.84 har sårbarhet. inkludert i no.nav.security:mock-oauth2-server:3.0.3",
             )
         }
         testImplementation("org.bouncycastle:bcpkix-jdk18on") {
@@ -88,7 +88,7 @@ dependencies {
                 require("1.84")
             }
             because(
-                "versjoner < 1.84 har sårbarhet. inkludert i no.nav.security:mock-oauth2-server:3.0.1",
+                "versjoner < 1.84 har sårbarhet. inkludert i no.nav.security:mock-oauth2-server:3.0.3",
             )
         }
     }
