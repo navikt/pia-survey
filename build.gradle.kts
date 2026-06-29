@@ -1,7 +1,7 @@
 
 plugins {
-    kotlin("jvm") version "2.3.21"
-    kotlin("plugin.serialization") version "2.3.21"
+    kotlin("jvm") version "2.4.0"
+    kotlin("plugin.serialization") version "2.4.0"
     id("application")
 }
 
@@ -13,8 +13,8 @@ repositories {
 }
 
 val ktorVersion = "3.5.0"
-val kotlinVersion = "2.3.21"
-val kotestVersion = "6.1.11"
+val kotlinVersion = "2.4.0"
+val kotestVersion = "6.2.1"
 val testcontainersVersion = "2.0.5"
 
 dependencies {
@@ -35,8 +35,8 @@ dependencies {
 
     // -- DB
     implementation("org.postgresql:postgresql:42.7.11")
-    implementation("com.zaxxer:HikariCP:7.0.2")
-    implementation("org.flywaydb:flyway-database-postgresql:12.8.1")
+    implementation("com.zaxxer:HikariCP:7.1.0")
+    implementation("org.flywaydb:flyway-database-postgresql:12.9.0")
     implementation("com.github.seratch:kotliquery:1.9.1")
 
     // -- div
@@ -56,7 +56,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
     testImplementation("io.ktor:ktor-client-cio:$ktorVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
-    testImplementation("no.nav.security:mock-oauth2-server:4.0.0")
+    testImplementation("no.nav.security:mock-oauth2-server:4.0.1")
 
     constraints {
         implementation("com.fasterxml.jackson.core:jackson-core") {
