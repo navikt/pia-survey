@@ -1,7 +1,7 @@
 
 plugins {
-    kotlin("jvm") version "2.4.0"
-    kotlin("plugin.serialization") version "2.4.0"
+    kotlin("jvm") version "2.3.21"
+    kotlin("plugin.serialization") version "2.3.21"
     id("application")
 }
 
@@ -13,7 +13,7 @@ repositories {
 }
 
 val ktorVersion = "3.5.0"
-val kotlinVersion = "2.4.0"
+val kotlinVersion = "2.3.21"
 val kotestVersion = "6.2.1"
 val testcontainersVersion = "2.0.5"
 
