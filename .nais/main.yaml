@@ -36,7 +36,7 @@ spec:
         flags:
         {{#each db_flags}}
           - name: {{@key}}
-           value: "{{this}}"
+            value: "{{this}}"
         {{/each}}
 
   observability:
