@@ -30,8 +30,14 @@ spec:
     sqlInstances:
       - type: POSTGRES_17
         tier: {{dbTier}}
+        diskAutoresize: {{dbAutoresize}}
         databases:
           - name: pia-survey-db
+        flags:
+        {{#each db_flags}}
+          - name: {{@key}}
+           value: "{{this}}"
+        {{/each}}
 
   observability:
     autoInstrumentation:

@@ -1,2 +1,7 @@
 kafkaPool: nav-prod
 dbTier: db-custom-2-3840
+dbAutoresize: true
+db_flags:
+  cloudsql.enable_pgaudit: "true"
+  pgaudit.log: 'write,ddl,role'
+  pgaudit.log_parameter: "on"
