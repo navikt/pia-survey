@@ -12,7 +12,7 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val ktorVersion = "3.5.0"
+val ktorVersion = "3.5.1"
 val kotlinVersion = "2.3.21"
 val kotestVersion = "6.2.1"
 val testcontainersVersion = "2.0.5"
@@ -56,12 +56,12 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
     testImplementation("io.ktor:ktor-client-cio:$ktorVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
-    testImplementation("no.nav.security:mock-oauth2-server:4.0.1")
+    testImplementation("no.nav.security:mock-oauth2-server:5.0.2")
 
     constraints {
         implementation("com.fasterxml.jackson.core:jackson-core") {
-            version { require("2.21.3") }
-            because("versjoner < 2.21.1 har sårbarhet. inkludert i ktor-server-auth:3.4.0")
+            version { require("2.21.4") }
+            because("versjoner < 2.21.4 har sårbarhet. inkludert i ktor-server-auth:3.5.0")
         }
         implementation("tools.jackson.core:jackson-core") {
             version { require("3.1.3") }
