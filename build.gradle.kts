@@ -34,7 +34,7 @@ dependencies {
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
 
     // -- DB
-    implementation("org.postgresql:postgresql:42.7.11")
+    implementation("org.postgresql:postgresql:42.7.12")
     implementation("com.zaxxer:HikariCP:7.1.0")
     implementation("org.flywaydb:flyway-database-postgresql:12.9.0")
     implementation("com.github.seratch:kotliquery:1.9.1")
@@ -64,8 +64,8 @@ dependencies {
             because("versjoner < 2.21.4 har sårbarhet. inkludert i ktor-server-auth:3.5.0")
         }
         implementation("tools.jackson.core:jackson-core") {
-            version { require("3.1.3") }
-            because("versjoner <= 3.1.0 har sårbarhet. inkludert i logstash-logback-encoder:9.0")
+            version { require("3.1.4") }
+            because("versjoner <= 3.1.3 har sårbarhet. inkludert i logstash-logback-encoder:9.0")
         }
         implementation("io.netty:netty-codec-http2") {
             version {
