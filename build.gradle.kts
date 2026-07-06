@@ -1,7 +1,7 @@
 
 plugins {
-    kotlin("jvm") version "2.3.21"
-    kotlin("plugin.serialization") version "2.3.21"
+    kotlin("jvm") version "2.4.0"
+    kotlin("plugin.serialization") version "2.4.0"
     id("application")
 }
 
@@ -13,7 +13,7 @@ repositories {
 }
 
 val ktorVersion = "3.5.1"
-val kotlinVersion = "2.3.21"
+val kotlinVersion = "2.4.0"
 val kotestVersion = "6.2.1"
 val testcontainersVersion = "2.0.5"
 
@@ -30,7 +30,7 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages-jvm:$ktorVersion")
 
     // -- logs
-    implementation("ch.qos.logback:logback-classic:1.5.34")
+    implementation("ch.qos.logback:logback-classic:1.5.37")
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
 
     // -- DB
@@ -44,7 +44,7 @@ dependencies {
 
     // Kafka
     implementation("at.yawk.lz4:lz4-java:1.11.0")
-    implementation("org.apache.kafka:kafka-clients:4.3.0") {
+    implementation("org.apache.kafka:kafka-clients:4.3.1") {
         // "Fikser CVE-2025-12183 - lz4-java >1.8.1 har sårbar versjon (transitive dependency fra kafka-clients:4.1.0)"
         exclude("org.lz4", "lz4-java")
     }
