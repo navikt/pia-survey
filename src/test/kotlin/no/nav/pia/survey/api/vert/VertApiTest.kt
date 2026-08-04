@@ -89,7 +89,8 @@ class VertApiTest {
                 hentSurveySomVert(behovsvurdering.opphav, behovsvurdering.type, behovsvurdering.id)
             survey.id shouldNotBe behovsvurdering.id
             postgresContainer.hentEnkelKolonne<String>(
-                sql = "select ekstern_id from survey where id = '${survey.id}'",
+                sql = "select ekstern_id from survey where id = ?",
+                params = listOf(survey.id),
             ) shouldBe behovsvurdering.id
         }
     }

@@ -17,18 +17,16 @@ class KafkaKonsumentTest {
             melding = Json.encodeToString(survey),
         )
         postgresContainer.hentEnkelKolonne<String>(
-            """
-            select status from survey where ekstern_id = '${survey.id}'
-            """.trimIndent(),
+            sql = "select status from survey where ekstern_id = ?",
+            params = listOf(survey.id),
         ) shouldBe "OPPRETTET"
 
         kafkaContainer.sendMeldingPåKafka(
             melding = Json.encodeToString(survey.copy(status = Survey.Status.PÅBEGYNT)),
         )
         postgresContainer.hentEnkelKolonne<String>(
-            """
-            select status from survey where ekstern_id = '${survey.id}'
-            """.trimIndent(),
+            sql = "select status from survey where ekstern_id = ?",
+            params = listOf(survey.id),
         ) shouldBe "PÅBEGYNT"
     }
 
@@ -39,9 +37,8 @@ class KafkaKonsumentTest {
             melding = Json.encodeToString(survey),
         )
         postgresContainer.hentEnkelKolonne<String>(
-            """
-            select type from survey where ekstern_id = '${survey.id}'
-            """.trimIndent(),
+            sql = "select type from survey where ekstern_id = ?",
+            params = listOf(survey.id),
         ) shouldBe "Behovsvurdering"
 
         kafkaContainer.sendMeldingPåKafka(
@@ -49,9 +46,8 @@ class KafkaKonsumentTest {
         )
 
         postgresContainer.hentAlleRaderTilEnkelKolonne<String>(
-            """
-            select id from survey where ekstern_id = '${survey.id}'
-            """.trimIndent(),
+            sql = "select id from survey where ekstern_id = ?",
+            params = listOf(survey.id),
         ) shouldHaveSize 0
     }
 
@@ -62,28 +58,29 @@ class KafkaKonsumentTest {
             melding = Json.encodeToString(kafkaContainer.enSurvey(surveyId)),
         )
         postgresContainer.hentEnkelKolonne<String>(
-            """
-            select type from survey where ekstern_id = '$surveyId'
-            """.trimIndent(),
+            sql = "select type from survey where ekstern_id = ?",
+            params = listOf(surveyId),
         ) shouldBe "Behovsvurdering"
 
         postgresContainer.hentEnkelKolonne<String>(
-            """
+            sql = """
             select tema.navn from tema join survey on (tema.survey = survey.id)
-             where survey.ekstern_id = '$surveyId'
+             where survey.ekstern_id = ?
              and tema.ekstern_id = '1'
             """.trimIndent(),
+            params = listOf(surveyId),
         ) shouldBe "Tema 1"
 
         postgresContainer.hentEnkelKolonne<String>(
-            """
+            sql = """
             select sporsmal.tekst from sporsmal 
              join tema on (sporsmal.tema = tema.id) 
              join survey on (tema.survey = survey.id)
-             where survey.ekstern_id = '$surveyId'
+             where survey.ekstern_id = ?
              and tema.ekstern_id = '1'
              and sporsmal.ekstern_id = 'spm_id_1'
             """.trimIndent(),
+            params = listOf(surveyId),
         ) shouldBe "Hva?"
     }
 }
