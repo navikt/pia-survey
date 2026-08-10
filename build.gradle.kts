@@ -12,7 +12,7 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val ktorVersion = "3.5.1"
+val ktorVersion = "3.5.2"
 val kotlinVersion = "2.4.10"
 val kotestVersion = "6.2.3"
 val testcontainersVersion = "2.0.5"
@@ -30,13 +30,13 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages-jvm:$ktorVersion")
 
     // -- logs
-    implementation("ch.qos.logback:logback-classic:1.6.0")
+    implementation("ch.qos.logback:logback-classic:1.6.1")
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
 
     // -- DB
     implementation("org.postgresql:postgresql:42.7.13")
     implementation("com.zaxxer:HikariCP:7.1.0")
-    implementation("org.flywaydb:flyway-database-postgresql:13.0.0")
+    implementation("org.flywaydb:flyway-database-postgresql:13.1.0")
     implementation("com.github.seratch:kotliquery:1.9.1")
 
     // -- div
