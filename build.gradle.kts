@@ -56,7 +56,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
     testImplementation("io.ktor:ktor-client-cio:$ktorVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
-    testImplementation("no.nav.security:mock-oauth2-server:6.0.1")
+    testImplementation("no.nav.security:mock-oauth2-server:6.0.2")
 
     constraints {
         implementation("com.fasterxml.jackson.core:jackson-core") {
