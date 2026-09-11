@@ -12,9 +12,11 @@ repositories {
     maven("https://jitpack.io")
 }
 
+val flywayVersion = "13.6.0"
 val ktorVersion = "3.5.2"
 val kotlinVersion = "2.4.10"
-val kotestVersion = "6.2.4"
+val kotestVersion = "6.2.5"
+val mockOauth2ServerVersion = "6.0.2"
 val testcontainersVersion = "2.0.5"
 
 dependencies {
@@ -36,7 +38,7 @@ dependencies {
     // -- DB
     implementation("org.postgresql:postgresql:42.7.13")
     implementation("com.zaxxer:HikariCP:7.1.0")
-    implementation("org.flywaydb:flyway-database-postgresql:13.3.0")
+    implementation("org.flywaydb:flyway-database-postgresql:$flywayVersion")
     implementation("com.github.seratch:kotliquery:1.9.1")
 
     // -- div
@@ -56,20 +58,20 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
     testImplementation("io.ktor:ktor-client-cio:$ktorVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
-    testImplementation("no.nav.security:mock-oauth2-server:6.0.1")
+    testImplementation("no.nav.security:mock-oauth2-server:$mockOauth2ServerVersion")
 
     constraints {
         implementation("com.fasterxml.jackson.core:jackson-core") {
-            version { require("2.22.1") }
+            version { require("2.22.2") }
             because("versjoner < 2.22.1 har sårbarhet. inkludert i ktor-server-auth:3.5.0")
         }
         implementation("tools.jackson.core:jackson-core") {
-            version { require("3.2.1") }
+            version { require("3.2.2") }
             because("versjoner <= 3.2.0 har sårbarhet. inkludert i logstash-logback-encoder:9.0")
         }
         implementation("io.netty:netty-codec-http2") {
             version {
-                require("4.2.16.Final")
+                require("4.2.18.Final")
             }
             because(
                 "versjoner < 4.2.16.Final har sårbarhet. inkludert i ktor-server-netty-jvm:3.4.2",
