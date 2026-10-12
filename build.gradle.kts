@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "2.4.10"
-    kotlin("plugin.serialization") version "2.4.10"
+    kotlin("jvm") version "2.4.20"
+    kotlin("plugin.serialization") version "2.4.20"
     id("application")
 }
 
@@ -11,12 +11,12 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val flywayVersion = "13.8.0"
+val flywayVersion = "13.9.0"
 val ktorVersion = "3.6.0"
-val kotlinVersion = "2.4.10"
+val kotlinVersion = "2.4.20"
 val kotestVersion = "6.2.5"
-val logbackVersion = "1.6.4"
-val mockOauth2ServerVersion = "6.0.3"
+val logbackVersion = "1.6.5"
+val mockOauth2ServerVersion = "6.0.4"
 val testcontainersVersion = "2.0.5"
 val yawkLz4JavaVersion = "1.12.0"
 
