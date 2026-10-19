@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "2.4.10"
-    kotlin("plugin.serialization") version "2.4.10"
+    kotlin("jvm") version "2.4.21"
+    kotlin("plugin.serialization") version "2.4.21"
     id("application")
 }
 
@@ -11,12 +11,12 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val flywayVersion = "13.8.0"
+val flywayVersion = "13.10.0"
 val ktorVersion = "3.6.0"
-val kotlinVersion = "2.4.10"
+val kotlinVersion = "2.4.21"
 val kotestVersion = "6.2.5"
-val logbackVersion = "1.6.4"
-val mockOauth2ServerVersion = "6.0.3"
+val logbackVersion = "1.6.5"
+val mockOauth2ServerVersion = "6.0.5"
 val testcontainersVersion = "2.0.5"
 val yawkLz4JavaVersion = "1.12.0"
 
@@ -37,7 +37,7 @@ dependencies {
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
 
     // -- DB
-    implementation("org.postgresql:postgresql:42.7.13")
+    implementation("org.postgresql:postgresql:42.7.14")
     implementation("com.zaxxer:HikariCP:7.1.0")
     implementation("org.flywaydb:flyway-database-postgresql:$flywayVersion")
     implementation("com.github.seratch:kotliquery:1.9.1")
