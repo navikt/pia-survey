@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "2.4.10"
-    kotlin("plugin.serialization") version "2.4.10"
+    kotlin("jvm") version "2.4.21"
+    kotlin("plugin.serialization") version "2.4.21"
     id("application")
 }
 
@@ -11,12 +11,12 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val flywayVersion = "13.8.0"
+val flywayVersion = "13.10.3"
 val ktorVersion = "3.6.0"
-val kotlinVersion = "2.4.10"
-val kotestVersion = "6.2.5"
-val logbackVersion = "1.6.4"
-val mockOauth2ServerVersion = "6.0.3"
+val kotlinVersion = "2.4.21"
+val kotestVersion = "6.2.6"
+val logbackVersion = "1.6.5"
+val mockOauth2ServerVersion = "6.1.2"
 val testcontainersVersion = "2.0.5"
 val yawkLz4JavaVersion = "1.12.0"
 
@@ -37,7 +37,7 @@ dependencies {
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
 
     // -- DB
-    implementation("org.postgresql:postgresql:42.7.13")
+    implementation("org.postgresql:postgresql:42.7.14")
     implementation("com.zaxxer:HikariCP:7.1.0")
     implementation("org.flywaydb:flyway-database-postgresql:$flywayVersion")
     implementation("com.github.seratch:kotliquery:1.9.1")
@@ -47,7 +47,7 @@ dependencies {
 
     // Kafka
     implementation("at.yawk.lz4:lz4-java:$yawkLz4JavaVersion")
-    implementation("org.apache.kafka:kafka-clients:4.3.1") {
+    implementation("org.apache.kafka:kafka-clients:4.3.2") {
         // "Fikser CVE-2025-12183 - lz4-java >1.8.1 har sårbar versjon (transitive dependency fra kafka-clients:4.1.0)"
         exclude("org.lz4", "lz4-java")
     }
