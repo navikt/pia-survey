@@ -11,14 +11,14 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val flywayVersion = "13.12.0"
+val flywayVersion = "13.12.1"
 val ktorVersion = "3.6.1"
 val kotlinVersion = "2.4.21"
 val kotestVersion = "6.2.6"
 val logbackVersion = "1.6.6"
 val mockOauth2ServerVersion = "6.1.4"
 val testcontainersVersion = "2.0.5"
-val yawkLz4JavaVersion = "1.13.0"
+val yawkLz4JavaVersion = "1.14.0"
 
 dependencies {
     // -- ktor
@@ -71,11 +71,11 @@ dependencies {
             because("Sikkerhetsoppdatering av transitiv avhengighet")
         }
         implementation("com.fasterxml.jackson.core:jackson-core") {
-            version { require("2.22.4") }
+            version { require("2.23.0") }
             because("versjoner < 2.22.1 har sårbarhet. inkludert i ktor-server-auth:3.5.0")
         }
         implementation("tools.jackson.core:jackson-core") {
-            version { require("3.2.4") }
+            version { require("3.3.0") }
             because("versjoner <= 3.2.0 har sårbarhet. inkludert i logstash-logback-encoder:9.0")
         }
         implementation("io.netty:netty-codec-http2") {
