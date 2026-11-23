@@ -11,12 +11,12 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val flywayVersion = "13.12.1"
+val flywayVersion = "13.12.2"
 val ktorVersion = "3.6.1"
 val kotlinVersion = "2.4.21"
-val kotestVersion = "6.2.6"
-val logbackVersion = "1.6.6"
-val mockOauth2ServerVersion = "6.1.4"
+val kotestVersion = "6.2.7"
+val logbackVersion = "1.6.7"
+val mockOauth2ServerVersion = "7.0.0"
 val testcontainersVersion = "2.0.5"
 val yawkLz4JavaVersion = "1.14.0"
 
